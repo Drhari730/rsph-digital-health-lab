@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI &amp; Infrastructure Primer | Digital Health Lab, RSPH</title>
+  <meta name="description" content="Plain-language guide to AI terms (AI, GenAI, LLM, SLM, RAG, XAI, SHAP) and computing infrastructure (CPU, GPU, RAM, storage, servers, databases) for public health." />
+  <link rel="icon" type="image/svg+xml" href="rsph_logo.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a href="./" aria-label="Digital Health Lab home"><img src="rsph_logo.svg" alt="Ramaiah School of Public Health" class="brand-logo-img" onerror="this.onerror=null;this.src='rsph_official_logo.png';" /></a>
+    <nav class="nav" aria-label="Main">
+      <a href="./#innovations">Innovations</a>
+      <a href="#ai-terms">AI terms</a>
+      <a href="#infra">Infrastructure</a>
+      <a href="#rules">Builder's rules</a>
+      <a href="primer.html" class="active">AI Primer</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero-banner">
+  <div class="wrap">
+    <div class="hero-kicker">Digital Health Lab · Learning resource</div>
+    <h1 style="color:#fff;font-size:clamp(28px,4.4vw,40px);margin-bottom:10px;">AI &amp; infrastructure primer</h1>
+    <p class="hero-sub">The terms you will hear when building digital health tools, explained in plain language with public-health examples. From "what is an LLM" to "why did my server lose its data".</p>
+    <div class="hero-actions">
+      <a class="btn btn-light" href="#ai-terms">Start with AI terms</a>
+      <a class="btn btn-ghost" href="#infra">Jump to infrastructure</a>
+    </div>
+  </div>
+</section>
+
+<main>
+<section class="block wrap" id="family">
+  <div class="eyebrow">The big picture</div>
+  <h2 class="section-title">How the AI terms fit inside each other</h2>
+  <p class="section-lede">Each circle is a smaller part of the one around it. Every LLM is generative AI, all generative AI is deep learning, and so on. XAI is not a circle: it is a set of methods for explaining any of them.</p>
+  <div class="stack reveal">
+    <svg viewBox="0 0 900 380" role="img" aria-label="Nested diagram: Artificial intelligence contains machine learning, which contains deep learning, which contains generative AI, which contains large and small language models.">
+      <rect x="10" y="10" width="620" height="360" rx="24" fill="#F8ECEE" stroke="#A82042" stroke-width="2"/>
+      <text x="32" y="44" font-family="Fraunces, Georgia, serif" font-size="20" font-weight="700" fill="#A82042">Artificial Intelligence (AI)</text>
+      <text x="32" y="66" font-family="Inter, sans-serif" font-size="13" fill="#64748B">Any system doing tasks that need human-like judgement</text>
+      <rect x="50" y="84" width="560" height="270" rx="20" fill="#FDF2F4" stroke="#C4303A" stroke-width="2"/>
+      <text x="70" y="114" font-family="Fraunces, Georgia, serif" font-size="18" font-weight="700" fill="#C4303A">Machine Learning (ML)</text>
+      <text x="70" y="134" font-family="Inter, sans-serif" font-size="13" fill="#64748B">Learns patterns from data, e.g. predicting TB treatment dropout</text>
+      <rect x="90" y="150" width="500" height="190" rx="18" fill="#FFF7ED" stroke="#D84A28" stroke-width="2"/>
+      <text x="110" y="178" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="700" fill="#D84A28">Deep Learning</text>
+      <text x="110" y="197" font-family="Inter, sans-serif" font-size="13" fill="#64748B">Many-layered neural networks, e.g. reading chest X-rays</text>
+      <rect x="130" y="212" width="440" height="116" rx="16" fill="#FFFFFF" stroke="#D97706" stroke-width="2"/>
+      <text x="150" y="240" font-family="Fraunces, Georgia, serif" font-size="16" font-weight="700" fill="#B45309">Generative AI</text>
+      <text x="150" y="258" font-family="Inter, sans-serif" font-size="13" fill="#64748B">Creates new text, images, audio</text>
+      <rect x="150" y="270" width="190" height="46" rx="10" fill="#1E40AF"/>
+      <text x="245" y="298" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">LLM (large)</text>
+      <rect x="356" y="270" width="190" height="46" rx="10" fill="#2563EB"/>
+      <text x="451" y="298" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#FFFFFF">SLM (small)</text>
+      <rect x="660" y="84" width="230" height="130" rx="18" fill="#021152"/>
+      <text x="680" y="116" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="700" fill="#FED7AA">XAI (explainable AI)</text>
+      <text x="680" y="140" font-family="Inter, sans-serif" font-size="13" fill="#CBD5E1">Methods that explain</text>
+      <text x="680" y="158" font-family="Inter, sans-serif" font-size="13" fill="#CBD5E1">why a model decided,</text>
+      <text x="680" y="176" font-family="Inter, sans-serif" font-size="13" fill="#CBD5E1">e.g. SHAP, LIME</text>
+      <path d="M660 150 H 600" stroke="#021152" stroke-width="2" stroke-dasharray="5 4"/>
+      <rect x="660" y="236" width="230" height="118" rx="18" fill="#ECFDF5" stroke="#047857" stroke-width="2"/>
+      <text x="680" y="266" font-family="Fraunces, Georgia, serif" font-size="17" font-weight="700" fill="#047857">Built on top of LLMs</text>
+      <text x="680" y="290" font-family="Inter, sans-serif" font-size="13" fill="#334155">RAG · fine-tuning</text>
+      <text x="680" y="310" font-family="Inter, sans-serif" font-size="13" fill="#334155">AI agents · chatbots</text>
+      <text x="680" y="330" font-family="Inter, sans-serif" font-size="13" fill="#334155">local / private LLMs</text>
+    </svg>
+  </div>
+</section>
+
+<section class="block wrap" id="ai-terms">
+  <div class="eyebrow">AI terms</div>
+  <h2 class="section-title">The AI vocabulary</h2>
+  <p class="section-lede">Search any term. Each card has a plain definition and an example from our own work.</p>
+  <input class="primer-search" id="searchAI" type="search" placeholder="Search, e.g. RAG, SHAP, token" aria-label="Search AI terms" />
+  <div class="grid" id="aiGrid"></div>
+  <p class="empty" id="aiEmpty" hidden>No matching term. Try a shorter word.</p>
+</section>
+
+<section class="block wrap" id="compare">
+  <div class="eyebrow">Side by side</div>
+  <h2 class="section-title">Three ways to make an AI "know" our material</h2>
+  <div class="table-wrap reveal">
+    <table class="cmp">
+      <thead><tr><th></th><th>Prompting</th><th>RAG</th><th>Fine-tuning</th></tr></thead>
+      <tbody>
+        <tr><td><b>What it is</b></td><td>Writing clear instructions and examples in the question</td><td>Searching our documents first, then letting the model answer from what it found</td><td>Further training the model on our examples so it changes its behaviour</td></tr>
+        <tr><td><b>Best for</b></td><td>Quick tasks, formatting, tone</td><td>Facts that must be correct and cited: guidelines, syllabi, SOPs</td><td>Style and skill: writing MCQs our way, a consistent tutor voice</td></tr>
+        <tr><td><b>Cost</b></td><td>None</td><td>Low: a vector database and some setup</td><td>Medium: GPU time and a curated training set</td></tr>
+        <tr><td><b>Updating</b></td><td>Edit the prompt</td><td>Add or replace a document; instant</td><td>Retrain</td></tr>
+        <tr><td><b>Our example</b></td><td>Vritta's minutes format</td><td>Diabot answering only from ICMR/RSSDI guidelines</td><td>Planned: a public-health MCQ generator for Pariksha</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="section-lede" style="margin-top:14px">Rule of thumb: use RAG for knowledge, fine-tuning for behaviour, and prompting always.</p>
+</section>
+
+<section class="block wrap" id="infra">
+  <div class="eyebrow">Infrastructure</div>
+  <h2 class="section-title">How a web app actually runs</h2>
+  <p class="section-lede">Every tool on our Innovations page follows this path. When something breaks, it breaks at one of these boxes.</p>
+  <div class="stack reveal">
+    <svg viewBox="0 0 900 250" role="img" aria-label="Request flow: user's browser, then domain and DNS, then server with frontend and backend, which reads and writes the database, file storage and the AI model.">
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#64748B"/></marker></defs>
+      <rect x="10" y="80" width="140" height="80" rx="14" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+      <text x="80" y="115" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#1E293B">Browser / app</text>
+      <text x="80" y="136" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#64748B">student's phone</text>
+      <path d="M152 120 H 200" stroke="#64748B" stroke-width="2" marker-end="url(#ar)"/>
+      <rect x="205" y="80" width="150" height="80" rx="14" fill="#F8ECEE" stroke="#A82042" stroke-width="2"/>
+      <text x="280" y="115" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#A82042">Domain + DNS</text>
+      <text x="280" y="136" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#64748B">pariksha.drhari.co.in</text>
+      <path d="M357 120 H 405" stroke="#64748B" stroke-width="2" marker-end="url(#ar)"/>
+      <rect x="410" y="40" width="210" height="160" rx="14" fill="#021152"/>
+      <text x="515" y="72" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">Server</text>
+      <rect x="428" y="88" width="174" height="40" rx="8" fill="#1E40AF"/>
+      <text x="515" y="113" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Frontend (what you see)</text>
+      <rect x="428" y="140" width="174" height="40" rx="8" fill="#2563EB"/>
+      <text x="515" y="165" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Backend / API (logic)</text>
+      <path d="M622 160 C 660 160, 660 60, 690 50" stroke="#64748B" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+      <path d="M622 160 H 688" stroke="#64748B" stroke-width="2" marker-end="url(#ar)"/>
+      <path d="M622 160 C 660 160, 660 220, 690 214" stroke="#64748B" stroke-width="2" fill="none" marker-end="url(#ar)"/>
+      <rect x="694" y="22" width="196" height="56" rx="12" fill="#ECFDF5" stroke="#047857" stroke-width="2"/>
+      <text x="792" y="47" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#047857">Database</text>
+      <text x="792" y="66" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#334155">marks, users, responses</text>
+      <rect x="694" y="132" width="196" height="56" rx="12" fill="#FFFBEB" stroke="#B45309" stroke-width="2"/>
+      <text x="792" y="157" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#B45309">File storage</text>
+      <text x="792" y="176" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#334155">PDFs, audio, images</text>
+      <rect x="694" y="190" width="196" height="50" rx="12" fill="#EFF6FF" stroke="#1E40AF" stroke-width="2"/>
+      <text x="792" y="220" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" font-weight="700" fill="#1E40AF">AI model (local or API)</text>
+    </svg>
+  </div>
+
+  <h2 class="section-title" style="margin-top:36px">The infrastructure vocabulary</h2>
+  <input class="primer-search" id="searchInfra" type="search" placeholder="Search, e.g. RAM, cache, database" aria-label="Search infrastructure terms" />
+  <div class="grid" id="infraGrid"></div>
+  <p class="empty" id="infraEmpty" hidden>No matching term. Try a shorter word.</p>
+</section>
+
+<section class="block wrap" id="where">
+  <div class="eyebrow">Where to host</div>
+  <h2 class="section-title">Local server, cloud server or free hosting?</h2>
+  <div class="table-wrap reveal">
+    <table class="cmp">
+      <thead><tr><th>Option</th><th>Examples</th><th>Good for</th><th>Watch out for</th></tr></thead>
+      <tbody>
+        <tr><td><b>Static hosting</b></td><td>Firebase Hosting, GitHub Pages</td><td>Sites with no server code: this website, PRISM's pages</td><td>Cannot run Python or keep a server-side database by itself</td></tr>
+        <tr><td><b>Platform-as-a-service (PaaS)</b></td><td>Railway, Render</td><td>Apps with a backend: Pariksha, Vichara, Sangam</td><td>Free tiers sleep (slow first load) and may have no backups</td></tr>
+        <tr><td><b>Backend-as-a-service</b></td><td>Firebase Firestore, Supabase</td><td>Login, database and storage without running your own server</td><td>Usage-based bills; lock-in to one provider</td></tr>
+        <tr><td><b>Cloud virtual machine</b></td><td>AWS, Azure, Google Cloud, Indian clouds</td><td>Full control, big workloads, GPUs by the hour</td><td>You manage security and updates; costs grow quietly</td></tr>
+        <tr><td><b>Local (on-premise) server</b></td><td>A Mac Studio or server in the lab</td><td>Sensitive data, private AI models, no monthly GPU rent</td><td>Needs power backup, IT network access, and your own backups</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="block wrap" id="rules">
+  <div class="eyebrow">Builder's rules</div>
+  <h2 class="section-title">Ten things every digital health builder should know</h2>
+  <div class="grid">
+    <div class="term reveal"><h3>1. Back up everything, automatically</h3><p>Follow the 3-2-1 rule: 3 copies, on 2 kinds of storage, 1 off-site. Free hosting tiers often keep no backup, so one wrong "reset" can erase exam results permanently.</p></div>
+    <div class="term reveal"><h3>2. Never put secrets in code</h3><p>API keys and passwords go in environment variables or a secrets manager, never in GitHub. A leaked key can run up bills or expose data within hours.</p></div>
+    <div class="term reveal"><h3>3. Identifiable data needs a reason and a lock</h3><p>India's DPDP Act 2023 applies to student and patient data. Collect the minimum, get consent, restrict access, and keep sensitive data off public AI services.</p></div>
+    <div class="term reveal"><h3>4. Own your accounts institutionally</h3><p>Domains, app-store accounts and hosting should be under the institution, with two admins, so a tool never depends on one person's login.</p></div>
+    <div class="term reveal"><h3>5. Separate test from live</h3><p>Try changes on a copy (a "staging" environment) before touching the live exam or portal.</p></div>
+    <div class="term reveal"><h3>6. Keep code in Git</h3><p>Git records every change so you can undo mistakes. GitHub stores it online and lets others help.</p></div>
+    <div class="term reveal"><h3>7. Memory decides which AI model you can run</h3><p>A model roughly needs (parameters × bytes per parameter) of memory. A 70B model at 4-bit needs about 40 GB before it answers a single question.</p></div>
+    <div class="term reveal"><h3>8. Validate before you trust</h3><p>An AI tool is a health intervention. Test it against experts (as Diabot does) and report accuracy before real use.</p></div>
+    <div class="term reveal"><h3>9. Watch the free-tier limits</h3><p>Free plans sleep, cap storage and change terms. Fine for demos; use a paid or institutional plan for anything students depend on.</p></div>
+    <div class="term reveal"><h3>10. A human approves every AI output</h3><p>Minutes, MCQs, clinical answers: AI drafts, a qualified person checks and signs off.</p></div>
+  </div>
+</section>
+</main>
+
+<footer class="rsph-portal-footer">
+  <div class="footer-top-accent"></div>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <img src="rsph_logo.svg" alt="Ramaiah School of Public Health" class="footer-logo-img" onerror="this.onerror=null;this.src='rsph_official_logo.png';" />
+        <p class="footer-brand-text">Digital Health Lab, Ramaiah School of Public Health, M. S. Ramaiah University of Applied Sciences, Bengaluru.</p>
+      </div>
+      <div>
+        <div class="footer-heading">On this page</div>
+        <ul class="footer-links">
+          <li><a href="#ai-terms">AI terms</a></li>
+          <li><a href="#compare">Prompting vs RAG vs fine-tuning</a></li>
+          <li><a href="#infra">Infrastructure</a></li>
+          <li><a href="#rules">Builder's rules</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Lab</div>
+        <ul class="footer-links">
+          <li><a href="./">Digital Health Lab home</a></li>
+          <li><a href="https://www.drhari.co.in" target="_blank" rel="noopener">drhari.co.in</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Ramaiah School of Public Health, MSRUAS</span><span>Built in-house by the Digital Health Lab</span></div>
+  </div>
+</footer>
+
+<script>
+const AI = [
+  ['Artificial Intelligence','AI','Computer systems that perform tasks normally needing human judgement: recognising, predicting, deciding, writing.','An umbrella term. Everything below is a kind of AI.'],
+  ['Machine Learning','ML','Software that learns patterns from past data instead of following hand-written rules.','Predicting which TB patients are likely to miss follow-up from past treatment records.'],
+  ['Deep Learning','DL','Machine learning with many-layered neural networks; powers image, speech and language AI.','Reading chest X-rays; converting speech to text in Vritta.'],
+  ['Generative AI','GenAI','AI that creates new content (text, images, audio, code) instead of only classifying or predicting.','Drafting meeting minutes, MCQs or a patient education leaflet.'],
+  ['Large Language Model','LLM','A generative model trained on huge amounts of text to predict the next word. Size is counted in parameters (e.g. 70B = 70 billion).','ChatGPT, Claude and Gemini are LLM-based. Llama, Qwen and Gemma are open-weight LLMs we can run ourselves.'],
+  ['Small Language Model','SLM','A language model with roughly 1 to 15 billion parameters. Faster and cheaper, runs on a laptop or phone, good at narrow tasks.','A small model fine-tuned only to classify interview excerpts into COM-B codes.'],
+  ['Local LLM','On-premise','Any LLM running on hardware you own instead of a company\'s cloud. Your data never leaves the machine.','The planned SPH assistant on a campus Mac Studio, so student data stays on campus.'],
+  ['Open-weight vs closed model','Licensing','Open-weight models publish their trained files so anyone can download and run them. Closed models are only reachable through the company\'s service.','We can run Llama or Qwen locally. We cannot run Claude or GPT on our own machine.'],
+  ['Parameters','Model size','The learned numbers inside a model. More parameters usually means more capable, but needs more memory and is slower.','7B fits a laptop; 70B needs a workstation with about 40+ GB of memory.'],
+  ['Token','Unit of text','The chunk of text a model reads and writes, about three-quarters of an English word. Speed is measured in tokens per second.','40 tokens/s feels instant; people read about 5 to 8 tokens/s.'],
+  ['Context window','Short-term memory','How much text a model can consider at once, in tokens. Anything outside it is not "seen".','A 128k-token window holds roughly a 300-page document.'],
+  ['Quantization','Compression','Storing model numbers with fewer bits (e.g. 4-bit instead of 16-bit) so a model uses about a quarter of the memory with a small loss of quality.','Lets a 70B model fit in 96 GB instead of 140+ GB.'],
+  ['Prompt','Instruction','The text you give the model. Clear role, task, format and examples give far better answers.','"You are an MPH examiner. Write 5 MCQs on confounding with one correct answer each."'],
+  ['Hallucination','Error type','When a model states something false in a confident way. The main safety risk in health use.','Inventing a drug dose or a guideline reference. RAG and citations reduce it.'],
+  ['Embeddings','Meaning as numbers','Turning text into lists of numbers so that texts with similar meaning sit close together. The basis of semantic search.','"Blood sugar" and "glycaemia" end up near each other even with no shared words.'],
+  ['Vector database','Search store','A database that stores embeddings and quickly finds the passages closest in meaning to a question.','Diabot searches 4,215 guideline passages this way.'],
+  ['Retrieval-Augmented Generation','RAG','First retrieve relevant passages from your own documents, then ask the model to answer using only those passages, with citations.','Diabot answers only from ICMR, RSSDI and MoHFW guidelines and cites the page.'],
+  ['Fine-tuning','Customising','Training an existing model further on your own examples so it learns a style or skill.','Teaching a model to write MCQs in our School\'s format.'],
+  ['LoRA','Efficient fine-tuning','Low-Rank Adaptation: fine-tunes a small add-on instead of the whole model, so it needs far less memory and time.','Makes fine-tuning possible on one workstation instead of a GPU cluster.'],
+  ['AI agent','Agentic AI','An AI that plans steps and uses tools (search, files, email, code) to finish a task, not just answer one question.','An agent that reads a recording, drafts minutes, files them and lists action items. A human still approves.'],
+  ['Explainable AI','XAI','Methods that show why a model made a decision, so clinicians and reviewers can check and trust it.','Showing that HbA1c and age drove a model\'s "high risk" label.'],
+  ['SHAP','XAI method','SHapley Additive exPlanations. Gives each input feature a score for how much it pushed one prediction up or down. Based on game theory.','For a dropout-risk model: distance to clinic +0.18, alcohol use +0.12, family support -0.09.'],
+  ['LIME','XAI method','Local Interpretable Model-agnostic Explanations. Explains one prediction by fitting a simple model around that single case.','A quicker, rougher alternative to SHAP for one patient\'s result.'],
+  ['Training vs inference','Two phases','Training builds or adapts a model (heavy, done rarely). Inference is using the model to answer (light, done constantly).','We mainly do inference and small fine-tunes; we do not train LLMs from scratch.'],
+];
+const INFRA = [
+  ['CPU','Processor','The general-purpose brain of a computer. Few cores, each very flexible. Runs the operating system, websites and statistics.','R and Stata analyses mostly use the CPU.'],
+  ['GPU','Graphics processor','Thousands of small cores doing the same maths in parallel. Ideal for AI, which is mostly large matrix multiplication.','Why AI training uses NVIDIA GPUs; the Mac Studio has a 64-core GPU.'],
+  ['NPU / Neural Engine','AI accelerator','A chip section built only for AI maths, very power-efficient. Apple calls it the Neural Engine.','Speeds up on-device transcription and small models.'],
+  ['RAM','Working memory','Fast, temporary memory holding whatever is being worked on right now. Cleared when power goes off.','An AI model must fit in RAM (or VRAM) to run at all.'],
+  ['VRAM','GPU memory','Memory attached to a separate graphics card. Limits which models an NVIDIA GPU can hold.','An RTX 5090 has 32 GB of VRAM, too little for a 70B model.'],
+  ['Unified memory','Apple Silicon','CPU and GPU share one large pool of memory, so the GPU can use almost all of it for AI.','A 96 GB Mac Studio gives the GPU far more memory than most single graphics cards.'],
+  ['Memory bandwidth','Speed of memory','How fast data moves from memory to the processor, in GB/s. For LLMs this decides tokens per second.','M5 Ultra: 1.2 TB/s. That is why it answers much faster than a Mac mini.'],
+  ['Cache','Short-cut memory','A small, fast store keeping recently used data close at hand. Exists in chips, browsers, servers and CDNs.','Why a website shows an old version after an update until the cache clears.'],
+  ['Storage (SSD / HDD)','Long-term memory','Keeps files when power is off. SSDs are fast and silent; hard disks (HDD) are slower but cheaper per terabyte.','Models load from SSD; backups sit on HDDs in a NAS.'],
+  ['NAS and RAID','Shared storage','A NAS is a network box of disks for the whole team. RAID spreads data across disks so one failed disk loses nothing.','Nightly backups of all portals to a 4-disk NAS.'],
+  ['Server','Always-on computer','A computer that waits for requests and answers them, day and night. Can be in the lab or in a data centre.','Pariksha\'s server sends each student their shuffled paper.'],
+  ['Local (on-premise) server','Own hardware','A server physically owned and kept by the institution.','Best for sensitive data and private AI.'],
+  ['Cloud server','Rented hardware','Computing rented from a provider by the hour or month. Scales up quickly; you pay while it runs.','Renting GPUs from the IndiaAI portal for a one-week fine-tune.'],
+  ['IaaS / PaaS / SaaS','Cloud layers','Infrastructure (rent a raw machine), Platform (upload code, they run it), Software (just use the app).','AWS VM = IaaS; Railway = PaaS; Google Forms = SaaS.'],
+  ['Cold start','Free-tier sleep','Free servers switch off when idle and take 30 seconds or more to wake on the next visit.','Why PHAMORA\'s portal is slow on the first click.'],
+  ['Database','Organised data','Software that stores data in a structured, searchable way and keeps it safe when many people write at once.','Pariksha stores students, answers and marks in a database.'],
+  ['SQL vs NoSQL','Database types','SQL databases (PostgreSQL, SQLite, MySQL) use tables with fixed columns. NoSQL (Firestore, MongoDB) stores flexible documents.','Marks and rosters suit SQL; varied app records suit NoSQL.'],
+  ['Backup','Safety copy','A separate copy of data you can restore from. Not the same as the live database.','3-2-1 rule: 3 copies, 2 media, 1 off-site.'],
+  ['Domain and DNS','Address','A domain is the name (drhari.co.in). DNS is the phonebook that points the name to the server\'s address.','pariksha.drhari.co.in is a subdomain pointing to Railway.'],
+  ['SSL / HTTPS','Encryption','Encrypts traffic between the browser and the server; shown by the padlock. Free via most hosts.','Required for any login or health data.'],
+  ['API','Connection point','A defined way for one program to ask another for data or actions.','Pariksha calls an email API (Resend) to send score cards.'],
+  ['Frontend / backend','Two halves','Frontend is what users see (HTML, CSS, JavaScript). Backend is the logic and data behind it (Python, Node, databases).','This site is frontend only; Pariksha has both.'],
+  ['Environment variables and secrets','Private settings','Passwords and API keys kept outside the code, set on the server.','Resend and database keys live in Railway settings, not GitHub.'],
+  ['Git and GitHub','Version control','Git records every change to code; GitHub stores repositories online.','Roll back a broken update in one command.'],
+  ['Developer accounts','Publishing','Google Play Console (one-time fee) and Apple Developer Program (yearly fee) are needed to publish apps.','Needed to put TB Mitra on the Play Store under the university\'s name.'],
+  ['Uptime and monitoring','Reliability','Uptime is the share of time a service works. Monitoring alerts you when it goes down.','Check before an exam that Pariksha is up.'],
+];
+function render(list, gridId, emptyId, q) {
+  const grid = document.getElementById(gridId); const s = (q || '').trim().toLowerCase();
+  const rows = list.filter(r => !s || r.join(' ').toLowerCase().includes(s));
+  grid.innerHTML = rows.map(([t, a, d, e]) => `<article class="term"><h3>${t} <span class="abbr">${a}</span></h3><p>${d}</p><p class="eg"><b>Example:</b> ${e}</p></article>`).join('');
+  document.getElementById(emptyId).hidden = rows.length > 0;
+}
+render(AI, 'aiGrid', 'aiEmpty'); render(INFRA, 'infraGrid', 'infraEmpty');
+document.getElementById('searchAI').addEventListener('input', e => render(AI, 'aiGrid', 'aiEmpty', e.target.value));
+document.getElementById('searchInfra').addEventListener('input', e => render(INFRA, 'infraGrid', 'infraEmpty', e.target.value));
+
+const reveals = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } }), { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+} else { reveals.forEach(el => el.classList.add('in')); }
+setTimeout(() => reveals.forEach(el => el.classList.add('in')), 2500);
+</script>
+</body>
+</html>
