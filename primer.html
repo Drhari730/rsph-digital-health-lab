@@ -156,7 +156,7 @@
         <tr><td><b>Platform-as-a-service (PaaS)</b></td><td>Railway, Render</td><td>Apps with a backend: Pariksha, Sangam, Artha</td><td>Free tiers sleep (slow first load) and may have no backups</td></tr>
         <tr><td><b>Backend-as-a-service</b></td><td>Firebase Firestore, Supabase</td><td>Login, database and storage without running your own server</td><td>Usage-based bills; lock-in to one provider</td></tr>
         <tr><td><b>Cloud virtual machine</b></td><td>AWS, Azure, Google Cloud, Indian clouds</td><td>Full control, big workloads, GPUs by the hour</td><td>You manage security and updates; costs grow quietly</td></tr>
-        <tr><td><b>Local (on-premise) server</b></td><td>A Mac Studio or server in the lab</td><td>Sensitive data, private AI models, no monthly GPU rent</td><td>Needs power backup, IT network access, and your own backups</td></tr>
+        <tr><td><b>Local (on-premise) server</b></td><td>The lab's DGX Spark and Mac mini servers</td><td>Sensitive data, private AI models, no monthly GPU rent</td><td>Needs power backup, IT network access, and your own backups</td></tr>
       </tbody>
     </table>
   </div>
@@ -218,12 +218,12 @@ const AI = [
   ['Generative AI','GenAI','AI that creates new content (text, images, audio, code) instead of only classifying or predicting.','Drafting meeting minutes, MCQs or a patient education leaflet.'],
   ['Large Language Model','LLM','A generative model trained on huge amounts of text to predict the next word. Size is counted in parameters (e.g. 70B = 70 billion).','ChatGPT, Claude and Gemini are LLM-based. Llama, Qwen and Gemma are open-weight LLMs we can run ourselves.'],
   ['Small Language Model','SLM','A language model with roughly 1 to 15 billion parameters. Faster and cheaper, runs on a laptop or phone, good at narrow tasks.','A small model fine-tuned only to classify interview excerpts into COM-B codes.'],
-  ['Local LLM','On-premise','Any LLM running on hardware you own instead of a company\'s cloud. Your data never leaves the machine.','The planned SPH assistant on a campus Mac Studio, so student data stays on campus.'],
+  ['Local LLM','On-premise','Any LLM running on hardware you own instead of a company\'s cloud. Your data never leaves the machine.','The planned SPH assistant on the lab's DGX Spark, so student data stays on campus.'],
   ['Open-weight vs closed model','Licensing','Open-weight models publish their trained files so anyone can download and run them. Closed models are only reachable through the company\'s service.','We can run Llama or Qwen locally. We cannot run Claude or GPT on our own machine.'],
   ['Parameters','Model size','The learned numbers inside a model. More parameters usually means more capable, but needs more memory and is slower.','7B fits a laptop; 70B needs a workstation with about 40+ GB of memory.'],
   ['Token','Unit of text','The chunk of text a model reads and writes, about three-quarters of an English word. Speed is measured in tokens per second.','40 tokens/s feels instant; people read about 5 to 8 tokens/s.'],
   ['Context window','Short-term memory','How much text a model can consider at once, in tokens. Anything outside it is not "seen".','A 128k-token window holds roughly a 300-page document.'],
-  ['Quantization','Compression','Storing model numbers with fewer bits (e.g. 4-bit instead of 16-bit) so a model uses about a quarter of the memory with a small loss of quality.','Lets a 70B model fit in 96 GB instead of 140+ GB.'],
+  ['Quantization','Compression','Storing model numbers with fewer bits (e.g. 4-bit instead of 16-bit) so a model uses about a quarter of the memory with a small loss of quality.','Lets a 70B model fit in about 40 GB instead of 140+ GB.'],
   ['Prompt','Instruction','The text you give the model. Clear role, task, format and examples give far better answers.','"You are an MPH examiner. Write 5 MCQs on confounding with one correct answer each."'],
   ['Hallucination','Error type','When a model states something false in a confident way. The main safety risk in health use.','Inventing a drug dose or a guideline reference. RAG and citations reduce it.'],
   ['Embeddings','Meaning as numbers','Turning text into lists of numbers so that texts with similar meaning sit close together. The basis of semantic search.','"Blood sugar" and "glycaemia" end up near each other even with no shared words.'],
@@ -239,12 +239,12 @@ const AI = [
 ];
 const INFRA = [
   ['CPU','Processor','The general-purpose brain of a computer. Few cores, each very flexible. Runs the operating system, websites and statistics.','R and Stata analyses mostly use the CPU.'],
-  ['GPU','Graphics processor','Thousands of small cores doing the same maths in parallel. Ideal for AI, which is mostly large matrix multiplication.','Why AI training uses NVIDIA GPUs; the Mac Studio has a 64-core GPU.'],
+  ['GPU','Graphics processor','Thousands of small cores doing the same maths in parallel. Ideal for AI, which is mostly large matrix multiplication.','Why AI training uses NVIDIA GPUs, like the Blackwell GPU in the lab's DGX Spark.'],
   ['NPU / Neural Engine','AI accelerator','A chip section built only for AI maths, very power-efficient. Apple calls it the Neural Engine.','Speeds up on-device transcription and small models.'],
   ['RAM','Working memory','Fast, temporary memory holding whatever is being worked on right now. Cleared when power goes off.','An AI model must fit in RAM (or VRAM) to run at all.'],
   ['VRAM','GPU memory','Memory attached to a separate graphics card. Limits which models an NVIDIA GPU can hold.','An RTX 5090 has 32 GB of VRAM, too little for a 70B model.'],
-  ['Unified memory','Apple Silicon','CPU and GPU share one large pool of memory, so the GPU can use almost all of it for AI.','A 96 GB Mac Studio gives the GPU far more memory than most single graphics cards.'],
-  ['Memory bandwidth','Speed of memory','How fast data moves from memory to the processor, in GB/s. For LLMs this decides tokens per second.','M5 Ultra: 1.2 TB/s. That is why it answers much faster than a Mac mini.'],
+  ['Unified memory','Shared memory','CPU and GPU share one large pool of memory, so the GPU can use almost all of it for AI. Used in the DGX Spark and in Apple Mac computers.','The DGX Spark's 128 GB gives its GPU far more memory than most single graphics cards.'],
+  ['Memory bandwidth','Speed of memory','How fast data moves from memory to the processor, in GB/s. For LLMs this decides tokens per second.','DGX Spark: 273 GB/s; Mac mini M6: 170 GB/s. Higher bandwidth means faster answers from the same model.'],
   ['Cache','Short-cut memory','A small, fast store keeping recently used data close at hand. Exists in chips, browsers, servers and CDNs.','Why a website shows an old version after an update until the cache clears.'],
   ['Storage (SSD / HDD)','Long-term memory','Keeps files when power is off. SSDs are fast and silent; hard disks (HDD) are slower but cheaper per terabyte.','Models load from SSD; backups sit on HDDs in a NAS.'],
   ['NAS and RAID','Shared storage','A NAS is a network box of disks for the whole team. RAID spreads data across disks so one failed disk loses nothing.','Nightly backups of all portals to a 4-disk NAS.'],
